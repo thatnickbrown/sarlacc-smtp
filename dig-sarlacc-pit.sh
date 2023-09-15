@@ -3,7 +3,7 @@
 PITFILE=/pit.raw
 PITDIR=/pit
 PITSIZE="1G"
-PITBIN="bin"
+3PITBIN="bin"
 PITSMTP="smtp"
 
 echo "This will create a loopback partition mounted as $PITDIR"
@@ -32,15 +32,16 @@ if mountpoint -q "$PITDIR"; then
 else
     echo "Mounting $PITFILE as $PITDIR."
     mount -t ext4 -o loop "$PITFILE" "$PITDIR"
+    chmod 700 "$PITDIR"
 fi
 
-if [ -d "$PITDIR/$PITBIN" ]; then
-    echo "$PITDIR/$PITBIN already exists. Skipping creation."
-else
-    echo "Creating binary directory for the pit: $PITDIR/$PITBIN"
-    mkdir "$PITDIR/$PITBIN"
-    chmod 700 "$PITDIR/$PITBIN"
-fi
+#if [ -d "$PITDIR/$PITBIN" ]; then
+#    echo "$PITDIR/$PITBIN already exists. Skipping creation."
+#else
+#    echo "Creating binary directory for the pit: $PITDIR/$PITBIN"
+#    mkdir "$PITDIR/$PITBIN"
+#    chmod 700 "$PITDIR/$PITBIN"
+#fi
 
 if [ -d "$PITDIR/$PITSMTP" ]; then
     echo "$PITDIR/$PITSMTP already exists. Skipping creation."
@@ -57,15 +58,15 @@ else
     echo "$PITFILE $PITDIR ext4 loop" >> /etc/fstab
 fi
 
-if [ -d "$PITDIR/$PITBIN/sarlacc-smtpd.py" ]; then
-    echo "sarlacc-smtp.py is already in $PITDIR/$PITBIN. Skipping installation."
+if [ -d "$PITDIR/sarlacc-smtpd.py" ]; then
+    echo "sarlacc-smtp.py is already in $PITDIR/. Skipping installation."
 else
-    echo "Copying sarlac-smtp to $PITDIR/$PITBIN."
-    cp "sarlacc-smtp.py" "$PITDIR/$PITBIN"
-    chmod 700 "$PITDIR/$PITBIN/sarlacc-smtp.py"
-    echo "Setting /pit/ ownership to the current user."
+    echo "Copying sarlac-smtp to $PITDIR."
+    cp sarlacc-smtp.py $PITDIR
+    chmod 700 "$PITDIR/sarlacc-smtp.py"
+    echo "Setting /pit/ ownership to the current user: $SUDO_USER."
     chown -R $SUDO_USER $PITDIR
-    echo "You can run sarlacc-smtp with $PITDIR/$PITBIN/sarlacc-smtp.py ."
+    echo "You can run sarlacc-smtp with $PITDIR/sarlacc-smtp.py ."
     echo "SMTP activity will be logged to $PITDIR/$PITSMTP."
 fi
 
