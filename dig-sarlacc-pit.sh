@@ -9,7 +9,7 @@ PITSMTP="smtp"
 echo "This will create a loopback partition mounted as $PITDIR"
 echo "backed by a $PITSIZE file $PITFILE. It will then deploy"
 echo "sarlacc-smtp.py to this directory at set it to be executable"
-echo "by the current user, $SUDO_USER.
+echo "by the current user, $SUDO_USER."
 
 if test -f "$PITFILE"; then
     echo "$PITFILE already exist. Skipping creation."
@@ -64,7 +64,7 @@ else
     cp "sarlacc-smtp.py" "$PITDIR/$PITBIN"
     chmod 700 "$PITDIR/$PITBIN/sarlacc-smtp.py"
     echo "Setting /pit/ ownership to the current user."
-    chown -r "$SUDO_USER $PITDIR"
+    chown -R $SUDO_USER $PITDIR
     echo "You can run sarlacc-smtp with $PITDIR/$PITBIN/sarlacc-smtp.py ."
     echo "SMTP activity will be logged to $PITDIR/$PITSMTP."
 fi
